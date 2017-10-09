@@ -1,0 +1,61 @@
+
+$fa=1;
+
+thickness=3;
+outer_diameter=110;
+inner_diameter=outer_diameter-(thickness*2);
+height=60;
+overlap=10;
+
+module funnel() {
+	render() difference() {
+		cylinder(h=height,d=inner_diameter);
+		union() {
+			height = (height-thickness);
+			
+			translate([0, 0, thickness]) union() {
+				cylinder(h=height,d1=0,d2=inner_diameter);
+				translate([-10, 0, 0]) cylinder(h=height,d=inner_diameter/3);
+			}
+		}
+	}
+	
+	difference() {
+		cylinder(h=height-overlap,d=outer_diameter);
+		cylinder(h=height,d=inner_diameter);
+	}
+}
+
+module chute() {
+	intersection() {
+		translate([0,0,thickness]) cylinder(h=height,d=outer_diameter);
+		rotate(-50, [0, 1, 0]) translate([-height/2+5, 0, height]) cube([height, height*2, height*3], true);
+	}
+}
+
+module dish(height=8) {
+	render() difference() {
+		cylinder(h=height,d=outer_diameter);
+		cylinder(h=height,d=inner_diameter);
+	}
+}
+
+module feeder() {
+	difference() {
+		funnel();
+		chute();
+	}
+	
+	dish();
+}
+
+module grooves() {
+	for (y = [-110:20:110]) {
+		translate([0, y, 0]) cube([outer_diameter, 1, 1], true);
+	}
+}
+
+difference() {
+	feeder();
+	grooves();
+}
