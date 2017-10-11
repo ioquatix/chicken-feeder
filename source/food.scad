@@ -10,7 +10,7 @@ overlap=10;
 module inner(offset=10) {
 	translate([0, 0, thickness]) union() {
 		#cylinder(h=height,d1=0,d2=inner_diameter);
-		translate([-inner_diameter/8, 0, 0]) cylinder(h=height,d=inner_diameter/2);
+		translate([0, 0, 0]) cylinder(h=height,d=inner_diameter/3);
 	}
 }
 
